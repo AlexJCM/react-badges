@@ -1,28 +1,44 @@
 {
   "name": "platzi-badges",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "scripts": {
-    "start": "npm-run-all -p client server",
-    "client": "react-scripts start",
-    "server": "json-server --port 3001 --watch server/db.json",
     "seed": "node server/seed.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "server": "json-server --port 3001 --watch server/db.json --static ./dist",
+    "dev": "webpack-dev-server --config ./webpack.dev.config.js",
+    "start:dev:server": "npm-run-all -p dev server",
+    "build:prod": "webpack --config ./webpack.config.js --mode production",
+    "build:dll": "webpack --config ./webpack.dll.config.js --mode production"
   },
   "dependencies": {
-    "bootstrap": "^4.3.1",
-    "md5": "^2.2.1",
+    "@babel/runtime": "7.6.0",
+    "bootstrap": "4.3.1",
+    "md5": "2.2.1",
     "react": "16.8.3",
     "react-dom": "16.8.3",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.5"
+    "react-router-dom": "4.3.1"
   },
   "devDependencies": {
-    "faker": "^4.1.0",
-    "json-server": "^0.14.2",
-    "npm-run-all": "^4.1.5"
+    "@babel/core": "7.6.0",
+    "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/plugin-syntax-dynamic-import": "7.2.0",
+    "@babel/plugin-transform-runtime": "7.6.0",
+    "@babel/preset-env": "7.6.0",
+    "@babel/preset-react": "7.0.0",
+    "add-asset-html-webpack-plugin": "^3.1.3",
+    "babel-loader": "8.0.6",
+    "css-loader": "3.2.0",
+    "faker": "4.1.0",
+    "file-loader": "4.2.0",
+    "html-webpack-plugin": "3.2.0",
+    "json-server": "0.14.2",
+    "mini-css-extract-plugin": "0.8.0",
+    "npm-run-all": "4.1.5",
+    "style-loader": "1.0.0",
+    "url-loader": "2.1.0",
+    "webpack": "4.40.2",
+    "webpack-cli": "3.3.9",
+    "webpack-dev-server": "3.8.1"
   },
   "eslintConfig": {
     "extends": "react-app"
