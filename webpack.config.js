@@ -3,6 +3,9 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const webpack = require("webpack");
 const AddAssetHtmlWebpackPlugin = require("add-asset-html-webpack-plugin");
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = {
   entry: {
@@ -10,9 +13,12 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, "dist"), //obtiene la direccion root de nuestro proyecto y
-    filename: "js/bundle-[name].js", //[name] obtiene el nombre del entry para guardarlo con ese nombre
+    filename: "js/bundle-[name].[hash].js", //[name] obtiene el nombre del entry para guardarlo con ese nombre
     publicPath: "http://localhost:3001/", //en donde voy a buscar los archivos
     chunkFilename: "js/[id].[chunkhash].js" //perzonaliza el nombre de los  chunks
+  },
+  optimization: {
+    minimizer: [new TerserPlugin(), new OptimizeCssAssetsPlugin()]
   },
   module: {
     rules: [
@@ -35,7 +41,9 @@ module.exports = {
         use: {
           loader: "url-loader",
           options: {
-            limit: 10000 //10KB. Lo recomendado como maximo es 100KB
+            limit: 1000, //10KB. Lo recomendado como maximo es 100KB
+            name: "[hash].[ext]",
+            outputPath: "assets"
           }
         }
       }
@@ -46,8 +54,8 @@ module.exports = {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: "css/[name].css",
-      chunkFilename: "css/[id].css" //para partir mis archivos de manera optimizada cuando se repitan
+      filename: "css/[name].[hash].css",
+      chunkFilename: "css/[id].[hash].css" //para partir mis archivos de manera optimizada cuando se repitan
     }),
     new HtmlWebpackPlugin({
       filename: "index.html", //es conveniente no cambiarle de nombre al archivo
@@ -63,6 +71,10 @@ module.exports = {
       //ya que no sabemos ni el nombre ni el hash
       outputPath: "js", //donde libero esos archivos
       publicPath: "http://localhost:3001/js"
+    }),
+    //
+    new CleanWebpackPlugin({
+      cleanAfterEveryBuildPatterns: ["**/app.**"]
     })
   ]
 };
